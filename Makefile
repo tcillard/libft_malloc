@@ -37,7 +37,7 @@ clean:
 	@ rm -rf $(OBJECTS_DIR)
 
 fclean: clean
-	@ rm -rf $(NAME)
+	@ rm -rf $(NAME).so
 
 re: fclean all
 
