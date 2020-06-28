@@ -27,6 +27,7 @@ $(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
 
 $(NAME): logo dir $(OBJECTS_PATH)
 	@ gcc $(FLAGS) $(INCLUDE_DIR) -shared -o $(NAME).so $(OBJECTS_DIR)/*.o
+	@ ln -sf $(NAME).so libft_malloc.so
 	@ echo "\n\x1b[32mDONE\x1b[37m"
 
 .PHONY: all clean fclean re
@@ -38,12 +39,13 @@ clean:
 
 fclean: clean
 	@ rm -rf $(NAME).so
+	@ rm -rf libft_malloc.so
+
 
 re: fclean all
 
 dir:
 	@ mkdir -p $(OBJECTS_DIR)
-
 
 logo:
 	@ echo "\x1b[31m"
