@@ -15,18 +15,17 @@ FLAGS = -Wall -Wextra -Werror -I
 SOURCES_DIR = ./sources
 OBJECTS_DIR = ./objects
 INCLUDE_DIR = ./include
-OBJECTS := $(SOURCES:.c=.o)
+OBJECTS := $(ALL_FILES:.c=.o)
 
-SOURCES_PATH = $(addprefix $(SOURCES_DIR)/, $(SOURCES))
 OBJECTS_PATH = $(addprefix $(OBJECTS_DIR)/, $(OBJECTS))
 
-$(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
+$(OBJECTS_DIR)/%.o: $(MALLOC_DIR)/%.c
 	@ echo "$(RCURSOR)$(ERASEL)\c"
 	@ echo "$(SCURSOR)$(@F) \c"
 	@ gcc $(FLAGS) $(INCLUDE_DIR) -c $< -o $@
 
 $(NAME): logo dir $(OBJECTS_PATH)
-	@ gcc $(FLAGS) $(INCLUDE_DIR) -shared -o $(NAME).so $(OBJECTS_DIR)/*.o
+	@ gcc $(FLAGS) $(INCLUDE_DIR) -shared -o $(NAME).so $(OBJECTS)/*.o
 	@ ln -sf $(NAME).so libft_malloc.so
 	@ echo "\n\x1b[32mDONE\x1b[37m"
 
