@@ -1,1 +1,1 @@
-REALLOC_FILES =	realloc.c	\
+REALLOC_FILES =	realloc.c

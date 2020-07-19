@@ -12,17 +12,18 @@ int             thereIsMemoryStack(size_t size)
     t_libft_malloc  storage;
 
     storage = getMemoryStorage();
-    if (size > storage.tiny && size > storage.small)
-        return (0)
+    if (size > storage.tinyActualStorage && size > storage.smallActualStorage)
+        return (0);
     else
-        return (1)
+        return (1);
 }
 
-void            *getMemory(size)
+void            *getMemory(size_t size)
 {
     t_libft_malloc storage;
-
+    (void) size;
     storage = getMemoryStorage();
+    return (NULL);
 }
 
 void            *malloc(size_t size)
@@ -36,11 +37,11 @@ void            *malloc(size_t size)
             finalMap = getMemory(size);
         else
         {
-            addMemory(size);
+          //  addMemory(size);
             finalMap = getMemory(size);
         }
     }
-    else
-        finalMap = getLargeMemory(size)
+    //else
+    //    finalMap = getLargeMemory(size);
     return (finalMap);
 }

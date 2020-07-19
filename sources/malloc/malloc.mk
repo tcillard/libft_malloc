@@ -1,1 +1,1 @@
-MALLOC_FILES =	malloc.c	\
+MALLOC_FILES =	malloc.c

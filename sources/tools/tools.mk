@@ -1,1 +1,1 @@
-TOOLS_FILES =	addMemory.c \
+TOOLS_FILES =	addMemory.c
