@@ -12,29 +12,49 @@ endif
 
 FLAGS = -Wall -Wextra -Werror -I
 
-SOURCES_DIR = ./sources
 OBJECTS_DIR = ./objects
+MALLOC_OBJECTS_DIR = $(OBJECTS_DIR)
+REALLOC_OBJECTS_DIR = $(OBJECTS_DIR)
+FREE_OBJECTS_DIR = $(OBJECTS_DIR)
+TOOLS_OBJECTS_DIR = $(OBJECTS_DIR)
+
 INCLUDE_DIR = ./include
-OBJECTS_MALLOC := $(SOURCES_MALLOC:.c=.o)
-OBJECTS_REALLOC := $(SOURCES_REALLOC:.c=.o)
-OBJECTS_TOOLS := $(SOURCES_TOOLS:.c=.o)
-OBJECTS_FREE := $(SOURCES_FREE:.c=.o)
-OBJECT_FILES = $(ALL_FILES:.c=.o)
+MALLOC_OBJECTS_FILES = $(MALLOC_FILES:.c=.o)
+FREE_OBJECTS_FILES = $(FREE_FILES:.c=.o)
+REALLOC_OBJECTS_FILES = $(REALLOC_FILES:.c=.o)
+TOOLS_OBJECTS_FILES = $(TOOLS_FILES:.c=.o)
+OBJECTS_FILES = $(ALL_FILES:.c=.o)
+OBJECTS_PATH = $(addprefix $(OBJECTS_DIR)/, $(OBJECTS_FILES))
 
-OBJECTS_PATH =	$(addprefix $(OBJECTS_DIR)/, $(OBJECT_FILES))
-	
+MALLOC_OBJECTS_PATH =	$(addprefix $(MALLOC_OBJECTS_DIR)/, $(MALLOC_OBJECTS_FILES))
+FREE_OBJECTS_PATH =	$(addprefix $(REALLOC_OBJECTS_DIR)/, $(REALLOC_OBJECTS_FILES))
+REALLOC_OBJECTS_PATH =	$(addprefix $(FREE_OBJECTS_DIR)/, $(FREE_OBJECTS_FILES))
+TOOLS_OBJECTS_PATH =	$(addprefix $(TOOLS_OBJECTS_DIR)/, $(TOOLS_OBJECTS_FILES))
 
-$(OBJECT_DIR)/%.o: $(ALL_SUBDIR)/%.c
+
+$(MALLOC_OBJECTS_DIR)/%.o: $(MALLOC_DIR)/%.c
+	@ echo "$(RCURSOR)$(ERASEL)\c"
+	@ echo "$(SCURSOR)$(@F) \c"
+	@ gcc $(FLAGS) $(INCLUDE_DIR) -c $< -o $@
+$(REALLOC_OBJECTS_DIR)/%.o: $(REALLOC_DIR)/%.c
+	@ echo "$(RCURSOR)$(ERASEL)\c"
+	@ echo "$(SCURSOR)$(@F) \c"
+	@ gcc $(FLAGS) $(INCLUDE_DIR) -c $< -o $@
+$(FREE_OBJECTS_DIR)/%.o: $(FREE_DIR)/%.c
+	@ echo "$(RCURSOR)$(ERASEL)\c"
+	@ echo "$(SCURSOR)$(@F) \c"
+	@ gcc $(FLAGS) $(INCLUDE_DIR) -c $< -o $@
+$(TOOLS_OBJECTS_DIR)/%.o: $(TOOLS_DIR)/%.c
 	@ echo "$(RCURSOR)$(ERASEL)\c"
 	@ echo "$(SCURSOR)$(@F) \c"
 	@ gcc $(FLAGS) $(INCLUDE_DIR) -c $< -o $@
 
 
-$(NAME): logo dir $(OBJECTS_PATH)
-	# @ gcc $(FLAGS) $(INCLUDE_DIR) -shared -o $(NAME).so $(OBJECTS)/*.o
-	# @ ln -sf $(NAME).so libft_malloc.so
-	# @ echo "\n\x1b[32mDONE\x1b[37m"
-
+$(NAME): logo dir $(MALLOC_OBJECTS_PATH) $(FREE_OBJECTS_PATH) $(REALLOC_OBJECTS_PATH) $(TOOLS_OBJECTS_PATH)
+	@ gcc $(FLAGS) $(INCLUDE_DIR) -shared -o $(NAME).so $(OBJECTS_PATH)
+	@ ln -sf $(NAME).so libft_malloc.so
+	@ echo "\n\x1b[32mDONE\x1b[37m"
+ 
 .PHONY: all clean fclean re
 
 all: $(NAME)
@@ -47,20 +67,7 @@ fclean: clean
 	@ rm -rf libft_malloc.so
 
 print: $(MALLOC_OBJECTS_DIR)
-	@ echo "ALL_FILES = $(ALL_FILES)\n"
-	@ echo "OBJECTS = $(OBJECTS)\n"
-	@ echo "OBJECTS_DIR = $(OBJECTS_DIR)\n"
-	@ echo "MALLOC_DIR = $(MALLOC_DIR)\n"
-	@ echo "MALLOC_OBJECTS_DIR = $(MALLOC_OBJECTS_DIR)\n"
-	@ echo "OBJECTS_PATH = $(OBJECTS_PATH)\n"
-	@ echo "SOURCES_MALLOC = $(SOURCES_MALLOC)\n"
-	@ echo "SOURCES_FREE = $(SOURCES_FREE)\n"
-	@ echo "SOURCES_REALLOC= $(SOURCES_REALLOC)\n"
-	@ echo "SOURCES_FREE = $(SOURCES_FREE)\n"
-	@ echo "FREE_OBJECTS_DIR = $(FREE_OBJECTS_DIR)\n"
-	@ echo "OBJECT_FILES = $(OBJECT_FILES)\n"
-	@ echo "ALL_SUBDIR = $(ALL_SUBDIR)\n"
-
+	@ echo "ALL_FILES = $(OBJECTS_FILES)\n"
 re: fclean all
 
 dir:
