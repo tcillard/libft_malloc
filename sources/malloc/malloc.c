@@ -1,41 +1,29 @@
 #include "libft_malloc.h"
-#include <stdio.h>
+#include <unistd.h>
+#include <sys/mman.h>
 
-int             thereIsMemoryStack(size_t size)
-{
-    t_libft_malloc  *storage;
+size_t          convertSizeToPageSize(size_t size) {
+    size_t pageSize;
 
-    storage = getMemoryStorage();
-    if (size > storage->tinyAvailableSize && size > storage->smallAvailableSize)
-        return (0);
-    else
-        return (1);
-}
-
-void            *getMemory(size_t size)
-{
-    t_libft_malloc *storage;
-    (void) size;
-    storage = getMemoryStorage();
-    return (NULL);
+    pageSize = 0;
+    while (pageSize < size) {
+        pageSize = pageSize + getpagesize();
+    }
+    return (pageSize / 8);
 }
 
 void            *malloc(size_t size)
 {
-    void    *finalMap;
+    char    *finalMap;
 
     finalMap = NULL;
-    if (size < SMALL)
-    {
-        if (thereIsMemoryStack(size))
-            finalMap = getMemory(size);
-        else
-        {
-          //  addMemory(size);
-            finalMap = getMemory(size);
-        }
-    }
-    //else
-    //    finalMap = getLargeMemory(size);
+    printf("getpage() = %zu\n",convertSizeToPageSize(size));
+    printf("finalMapp adress: %p\n", finalMap);
+    finalMap = mmap(NULL, convertSizeToPageSize(size), PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE, 0, 0);
+    printf("mmap: %p\n", finalMap);
+    finalMap[0] = 'a';
+    finalMap[1] = 'b';
+    finalMap[3] = '\0';
+    printf("finalMap address: %p\n", finalMap);
     return (finalMap);
 }

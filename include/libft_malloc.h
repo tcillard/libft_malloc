@@ -5,14 +5,32 @@
 # include <stdlib.h>
 # include <stddef.h>
 # include <stdio.h> //del
-# define TINY   100
-# define SMALL  10000
+# define TINY_LIMIT   100
+# define SMALL_LIMIT  10000
+
+typedef struct	s_block
+{
+	struct s_block 	*next;
+	struct s_block	*prev;
+	size_t			size;
+
+}				t_block;
+
+typedef struct	t_page
+{
+    struct s_page	*next;
+    struct s_page	*prev;
+	void			*alloc;
+	void			*free;
+	size_t			size;
+
+}				t_page;
+
 typedef struct s_libft_malloc
 {
-    void    *tiny;
-    void    *small;
-    size_t  tinyAvailableSize;
-    size_t  smallAvailableSize;
+	struct t_page	*tiny;
+    struct t_page	*small;
+    struct t_block	*large;
 }             t_libft_malloc;
 
 void            *malloc(size_t size);
